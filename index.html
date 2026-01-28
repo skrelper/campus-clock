@@ -8,42 +8,65 @@
   <style>
     body {
       margin: 0;
-      background-color: #000;
+      height: 100vh;
+      font-family: 'Barlow', Arial, sans-serif;
+      color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: 'Barlow', Arial, sans-serif;
-      color: #fff;
+      /* fallback color first */
+      background-color: #000;
+      /* image background */
+      background-image: url('https://www.columbusmonthly.com/gcdn/presto/2021/07/21/NCOM/c73735f3-7e6f-4208-809e-dba07553c037-cmm_arch_ccadsign0621_02.jpg?crop=2199,1237,x1,y219&width=2199&height=1237&format=pjpg&auto=webp');
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      position: relative;
+    }
+
+    /* Dark overlay for readability */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+
+    .time, .date {
+      position: relative;
+      z-index: 2;
+      text-align: center;
     }
 
     .time {
-      font-size: 80px;
+      font-size: 120px; /* bigger clock text */
       font-weight: 700;
       display: flex;
       align-items: flex-start;
-      border-bottom: 3px solid #c8102e; /* subtle CCAD accent underline */
+      border-bottom: 3px solid #c8102e;
       padding-bottom: 10px;
     }
 
     .ampm {
       color: #c8102e;
-      font-size: 36px;
-      margin-left: 10px;
+      font-size: 50px; /* bigger AM/PM */
+      margin-left: 15px;
       vertical-align: super;
     }
 
     .date {
-      font-size: 32px;
-      margin-top: 20px;
-      text-align: center;
+      font-size: 40px; /* bigger date */
+      margin-top: 25px;
     }
   </style>
 </head>
 <body>
   <div class="time">
-    <span id="clock">--:--</span>
+    <span id="clock">--:--:--</span>
     <span class="ampm" id="ampm">AM</span>
   </div>
   <div class="date" id="date"></div>
@@ -53,10 +76,11 @@
       const now = new Date();
       let hours = now.getHours();
       const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
 
-      document.getElementById('clock').textContent = `${hours}:${minutes}`;
+      document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
       document.getElementById('ampm').textContent = ampm;
 
       const options = { weekday: 'long', month: 'long', day: 'numeric' };
